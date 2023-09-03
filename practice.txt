@@ -1,0 +1,1054 @@
+3/9/2023 ==  practice
+
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databaes;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databaes' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| firstproject       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.06 sec)
+
+mysql> create database mydb;
+Query OK, 1 row affected (0.18 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| firstproject       |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use mydb;
+Database changed
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table user(
+    -> id int(10),
+    -> name varchar(50),
+    -> age date
+    -> );
+Query OK, 0 rows affected, 1 warning (0.25 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| user           |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> describe user;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | YES  |     | NULL    |       |
+| name  | varchar(50) | YES  |     | NULL    |       |
+| age   | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into user values(1, 'abdur rahim', 32);
+ERROR 1292 (22007): Incorrect date value: '32' for column 'age' at row 1
+mysql> insert into user values(1, 'abdur rahim', '3-9-2023');
+ERROR 1292 (22007): Incorrect date value: '3-9-2023' for column 'age' at row 1
+mysql> alter table user
+    -> modify column age int(10);
+Query OK, 0 rows affected, 1 warning (0.34 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> describe user
+    -> ;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | YES  |     | NULL    |       |
+| name  | varchar(50) | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into user values(1, 'abdur rahim', 32);
+Query OK, 1 row affected (0.15 sec)
+
+mysql> select * from user;
++------+-------------+------+
+| id   | name        | age  |
++------+-------------+------+
+|    1 | abdur rahim |   32 |
++------+-------------+------+
+1 row in set (0.00 sec)
+
+mysql> create table test1(
+    -> id int not null auto_increment primary key,
+    -> age int check(age>=18)
+    -> );
+Query OK, 0 rows affected (0.20 sec)
+
+mysql> describe test1;
++-------+------+------+-----+---------+----------------+
+| Field | Type | Null | Key | Default | Extra          |
++-------+------+------+-----+---------+----------------+
+| id    | int  | NO   | PRI | NULL    | auto_increment |
+| age   | int  | YES  |     | NULL    |                |
++-------+------+------+-----+---------+----------------+
+2 rows in set (0.02 sec)
+
+mysql> insert into test1 values(23);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into test1(age) values(23);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into test1(age) values(15);
+ERROR 3819 (HY000): Check constraint 'test1_chk_1' is violated.
+mysql> insert into test1(age) values(15);
+ERROR 3819 (HY000): Check constraint 'test1_chk_1' is violated.
+mysql> insert into test1(age) values(25);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from test1;
++----+------+
+| id | age  |
++----+------+
+|  1 |   23 |
+|  2 |   25 |
++----+------+
+2 rows in set (0.00 sec)
+
+mysql> create table test2(
+    -> id int not null auto_increment primary key,
+    -> name varchar(50) default 'karim',
+    -> age int
+    -> );
+Query OK, 0 rows affected (0.28 sec)
+
+mysql> describe test2;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(50) | YES  |     | karim   |                |
+| age   | int         | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into test2(age) values(10);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from test2;
++----+-------+------+
+| id | name  | age  |
++----+-------+------+
+|  1 | karim |   10 |
++----+-------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into test2(name, age) values('abdur rahim',10);
+Query OK, 1 row affected (0.15 sec)
+
+mysql> select * from test2;
++----+-------------+------+
+| id | name        | age  |
++----+-------------+------+
+|  1 | karim       |   10 |
+|  2 | abdur rahim |   10 |
++----+-------------+------+
+2 rows in set (0.00 sec)
+
+mysql> create table test3(
+    -> id not null auto_increment primary key,
+    -> brandName varchar(25) unique
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null auto_increment primary key,
+brandName varchar(25) unique
+)' at line 2
+mysql> create table test3(
+    -> id int not null auto_increment primary key,
+    -> brand varchar(25)
+    -> );
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> describe test3;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| brand | varchar(25) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into test3(brand) values('a');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into test3(brand) values('a');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> alter table test3
+    -> modify column brand varchar(25) unique;
+ERROR 1062 (23000): Duplicate entry 'a' for key 'test3.brand'
+mysql> select * from test3;
++----+-------+
+| id | brand |
++----+-------+
+|  1 | a     |
+|  2 | a     |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> delete from test3 where id = 2;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> describe test3;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| brand | varchar(25) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> alter table test3
+    -> modify column brand varchar(50) unique;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into test3(brand) values('a')
+    -> ;
+ERROR 1062 (23000): Duplicate entry 'a' for key 'test3.brand'
+mysql> insert into test3(brand) values('b')
+    -> ;
+Query OK, 1 row affected (0.13 sec)
+
+mysql> select * from test3;
++----+-------+
+| id | brand |
++----+-------+
+|  1 | a     |
+|  4 | b     |
++----+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table test4(
+    -> id int not null primary key auto_increment,
+    -> brand varchar(25),
+    -> size enum('small', 'medium', 'large', 'x-large')
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> describe test4;
++-------+------------------------------------------+------+-----+---------+----------------+
+| Field | Type                                     | Null | Key | Default | Extra          |
++-------+------------------------------------------+------+-----+---------+----------------+
+| id    | int                                      | NO   | PRI | NULL    | auto_increment |
+| brand | varchar(25)                              | YES  |     | NULL    |                |
+| size  | enum('small','medium','large','x-large') | YES  |     | NULL    |                |
++-------+------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into test4(brand, size) values('nokia', 'small');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> select * from test4;
++----+-------+-------+
+| id | brand | size  |
++----+-------+-------+
+|  1 | nokia | small |
++----+-------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into test4(brand, size) values('nokia', 'sml');
+ERROR 1265 (01000): Data truncated for column 'size' at row 1
+mysql> select * from test4;
++----+-------+-------+
+| id | brand | size  |
++----+-------+-------+
+|  1 | nokia | small |
++----+-------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into test4(brand, size) values('samsung', 'medium');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into test4(brand, size) values('oppo', 'large');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> crete index indx_brand on test4(brand);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'crete index indx_brand on test4(brand)' at line 1
+mysql> create index indx_brand on test4(brand);
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe test4;
++-------+------------------------------------------+------+-----+---------+----------------+
+| Field | Type                                     | Null | Key | Default | Extra          |
++-------+------------------------------------------+------+-----+---------+----------------+
+| id    | int                                      | NO   | PRI | NULL    | auto_increment |
+| brand | varchar(25)                              | YES  | MUL | NULL    |                |
+| size  | enum('small','medium','large','x-large') | YES  |     | NULL    |                |
++-------+------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from test4;
++----+---------+--------+
+| id | brand   | size   |
++----+---------+--------+
+|  1 | nokia   | small  |
+|  2 | samsung | medium |
+|  3 | oppo    | large  |
++----+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from test4 use index(indx_brand);
++----+---------+--------+
+| id | brand   | size   |
++----+---------+--------+
+|  1 | nokia   | small  |
+|  2 | samsung | medium |
+|  3 | oppo    | large  |
++----+---------+--------+
+3 rows in set (0.02 sec)
+
+mysql> create table Persons(
+    -> Person_id int not null primary key auto_increment,
+    -> Name varchar(25) not null,
+    -> Age int check(age>=18),
+    -> City varchar(25)
+    -> );
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> describe Persons;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| Person_id | int         | NO   | PRI | NULL    | auto_increment |
+| Name      | varchar(25) | NO   |     | NULL    |                |
+| Age       | int         | YES  |     | NULL    |                |
+| City      | varchar(25) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> create table Orders(
+    -> Order_id int not null primary key auto_increment,
+    -> Order_num int not null,
+    -> Person_id int,
+    -> foreign key (Person_id) references Persons(Persons)
+    -> );
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'Persons' for constraint 'orders_ibfk_1' in the referenced table 'persons'
+mysql> create table Orders(
+    -> Order_id int not null primary key auto_increment,
+    -> Order_num int not null,
+    -> Person_id int,
+    -> foreign key (Person_id) references Persons(Person_id)
+    -> );
+Query OK, 0 rows affected (0.22 sec)
+
+mysql> decribe orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'decribe orders' at line 1
+mysql> decribe Orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'decribe Orders' at line 1
+mysql> describe Orders;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| Order_id  | int  | NO   | PRI | NULL    | auto_increment |
+| Order_num | int  | NO   |     | NULL    |                |
+| Person_id | int  | YES  | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into Persons(Name, Age, City) values('abdur rahim',23,'New York');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into Persons(Name, Age, City) values('abdur rahim',23,'Washington ');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Orders(Order_num, Person_id) values(100, 23);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`mydb`.`orders`, CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`Person_id`) REFERENCES `persons` (`Person_id`))
+mysql> insert into Orders(Order_num, Person_id) values(100, 2);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> index(indx_brand)
+
+
+
+
+04/09/2023 #######################################################################################################################################
+
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| firstproject       |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.29 sec)
+
+mysql> use mydb;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| orders         |
+| persons        |
+| test1          |
+| test2          |
+| test3          |
+| test4          |
+| user           |
++----------------+
+7 rows in set (0.12 sec)
+
+mysql> select * from orders;
++----------+-----------+-----------+
+| Order_id | Order_num | Person_id |
++----------+-----------+-----------+
+|        2 |       100 |         2 |
++----------+-----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> insert into order (Order_num, Person_id) values (101, 1);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order (Order_num, Person_id) values (101, 1)' at line 1
+mysql> insert into orders (Order_num, Person_id) values (101, 1);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into orders (Order_num, Person_id) values (102, 1);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into orders (Order_num, Person_id) values (103, 2);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> create view Oerder as select Order_id, Order_num from orders where Person_id = 1;
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> select * from oerder;
++----------+-----------+
+| Order_id | Order_num |
++----------+-----------+
+|        3 |       101 |
+|        4 |       102 |
++----------+-----------+
+2 rows in set (0.10 sec)
+
+mysql> create table Products(
+    -> id int not null primary key auto_increment,
+    -> ProductName varchar(100) not null,
+    -> Price int not null
+    -> );
+Query OK, 0 rows affected (0.33 sec)
+
+mysql> describe Products;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int          | NO   | PRI | NULL    | auto_increment |
+| ProductName | varchar(100) | NO   |     | NULL    |                |
+| Price       | int          | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.08 sec)
+
+mysql> insert into Products(ProductName, Price) values('Ceiling Fan', 3200);
+Query OK, 1 row affected (0.18 sec)
+
+mysql> insert into Products(ProductName, Price) values('Table Fan', 4200);
+Query OK, 1 row affected (0.34 sec)
+
+mysql> insert into Products(ProductName, Price) values('Padestral Fan', 5700);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into Products(ProductName, Price) values('Electric Motor', 3800);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into Products(ProductName, Price) values('Stebilizer', 6600);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> create view [Products Above Average Price] as select ProductName, Price from Products where Price > (select avg(Price) from Products);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[Products Above Average Price] as select ProductName, Price from Products where ' at line 1
+mysql> create view [Products Above Average Price] as select ProductName, Price from Products where Price > (select avg(Price) from Products);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[Products Above Average Price] as select ProductName, Price from Products where ' at line 1
+mysql> create view [Products Above Average Price] AS select ProductName, Price from Products where Price > (select avg(Price) from Products);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[Products Above Average Price] AS select ProductName, Price from Products where ' at line 1
+mysql> C:\laragon\www
+ERROR:
+Unknown command '\l'.
+Show warnings disabled.
+    -> λ mysql -u root -p
+    -> Enter password:
+    -> Welcome to the MySQL monitor.  Commands end with ; or \g.
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'C:\laragonww
+? mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  C' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'or' at line 1
+    -> Your MySQL connection id is 8
+    -> Server version: 8.0.30 MySQL Community Server - GPL
+    ->
+    -> Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+    ->
+    -> Oracle is a registered trademark of Oracle Corporation and/or its
+    -> affiliates. Other names may be trademarks of their respective
+    -> owners.
+    ->
+    -> Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+    ->
+    -> mysql> show databaes;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - ' at line 1
+mysql> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databaes' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ERROR 1064 (42000): You have an error in your SQL syntax' at line 1
+    -> mysql> show databases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'the manual that corresponds to your MySQL server version for the right syntax to' at line 1
+mysql> +--------------------+
+    -> | Database           |
+    -> +--------------------+
+    -> | firstproject       |
+    -> | information_schema |
+    -> | mysql              |
+    -> | performance_schema |
+    -> | sys                |
+    -> +--------------------+
+    -> 5 rows in set (0.06 sec)
+    ->
+    -> mysql> create database mydb;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+--------------------+
+| Database           |
++--------------------+
+| firstproj' at line 1
+mysql> Query OK, 1 row affected (0.18 sec)
+    ->
+    -> mysql> show databases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 1 row affected (0.18 sec)
+
+mysql> show databases' at line 1
+mysql> +--------------------+
+    -> | Database           |
+    -> +--------------------+
+    -> | firstproject       |
+    -> | information_schema |
+    -> | mydb               |
+    -> | mysql              |
+    -> | performance_schema |
+    -> | sys                |
+    -> +--------------------+
+    -> 6 rows in set (0.00 sec)
+    ->
+    -> mysql> use mydb;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+--------------------+
+| Database           |
++--------------------+
+| firstproj' at line 1
+mysql> Database changed
+    -> mysql> show tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Database changed
+mysql> show tables' at line 1
+mysql> Empty set (0.00 sec)
+    ->
+    -> mysql> create table user(
+    ->     -> id int(10),
+    ->     -> name varchar(50),
+    ->     -> age date
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Empty set (0.00 sec)
+
+mysql> create table user(
+    -> id int(10),
+    -> name v' at line 1
+mysql> Query OK, 0 rows affected, 1 warning (0.25 sec)
+    ->
+    -> mysql> show tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected, 1 warning (0.25 sec)
+
+mysql> show tables' at line 1
+mysql> +----------------+
+    -> | Tables_in_mydb |
+    -> +----------------+
+    -> | user           |
+    -> +----------------+
+    -> 1 row in set (0.00 sec)
+    ->
+    -> mysql> describe user;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+----------------+
+| Tables_in_mydb |
++----------------+
+| user           |
++---' at line 1
+mysql> +-------+-------------+------+-----+---------+-------+
+    -> | Field | Type        | Null | Key | Default | Extra |
+    -> +-------+-------------+------+-----+---------+-------+
+    -> | id    | int         | YES  |     | NULL    |       |
+    -> | name  | varchar(50) | YES  |     | NULL    |       |
+    -> | age   | date        | YES  |     | NULL    |       |
+    -> +-------+-------------+------+-----+---------+-------+
+    -> 3 rows in set (0.00 sec)
+    ->
+    -> mysql> insert into user values(1, 'abdur rahim', 32);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+-------+-------------+------+-----+---------+-------+
+| Field | Type        | N' at line 1
+mysql> ERROR 1292 (22007): Incorrect date value: '32' for column 'age' at row 1
+    -> mysql> insert into user values(1, 'abdur rahim', '3-9-2023');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ERROR 1292 (22007): Incorrect date value: '32' for column 'age' at row 1
+mysql> ' at line 1
+mysql> ERROR 1292 (22007): Incorrect date value: '3-9-2023' for column 'age' at row 1
+    -> mysql> alter table user
+    ->     -> modify column age int(10);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ERROR 1292 (22007): Incorrect date value: '3-9-2023' for column 'age' at row 1
+m' at line 1
+mysql> Query OK, 0 rows affected, 1 warning (0.34 sec)
+    -> Records: 0  Duplicates: 0  Warnings: 1
+    ->
+    -> mysql> describe user
+    ->     -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected, 1 warning (0.34 sec)
+Records: 0  Duplicates: 0  Warni' at line 1
+mysql> +-------+-------------+------+-----+---------+-------+
+    -> | Field | Type        | Null | Key | Default | Extra |
+    -> +-------+-------------+------+-----+---------+-------+
+    -> | id    | int         | YES  |     | NULL    |       |
+    -> | name  | varchar(50) | YES  |     | NULL    |       |
+    -> | age   | int         | YES  |     | NULL    |       |
+    -> +-------+-------------+------+-----+---------+-------+
+    -> 3 rows in set (0.00 sec)
+    ->
+    -> mysql> insert into user values(1, 'abdur rahim', 32);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+-------+-------------+------+-----+---------+-------+
+| Field | Type        | N' at line 1
+mysql> Query OK, 1 row affected (0.15 sec)
+    ->
+    -> mysql> select * from user;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 1 row affected (0.15 sec)
+
+mysql> select * from user' at line 1
+mysql> +------+-------------+------+
+    -> | id   | name        | age  |
+    -> +------+-------------+------+
+    -> |    1 | abdur rahim |   32 |
+    -> +------+-------------+------+
+    -> 1 row in set (0.00 sec)
+    ->
+    -> mysql> create table test1(
+    ->     -> id int not null auto_increment primary key,
+    ->     -> age int check(age>=18)
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+------+-------------+------+
+| id   | name        | age  |
++------+------------' at line 1
+mysql> Query OK, 0 rows affected (0.20 sec)
+    ->
+    -> mysql> describe test1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected (0.20 sec)
+
+mysql> describe test1' at line 1
+mysql> +-------+------+------+-----+---------+----------------+
+    -> | Field | Type | Null | Key | Default | Extra          |
+    -> +-------+------+------+-----+---------+----------------+
+    -> | id    | int  | NO   | PRI | NULL    | auto_increment |
+    -> | age   | int  | YES  |     | NULL    |                |
+    -> +-------+------+------+-----+---------+----------------+
+    -> 2 rows in set (0.02 sec)
+    ->
+    -> mysql> insert into test1 values(23);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+-------+------+------+-----+---------+----------------+
+| Field | Type | Null |' at line 1
+mysql> ERROR 1136 (21S01): Column count doesn't match value count at row 1
+    '> mysql> insert into test1(age) values(23);
+    '> Query OK, 1 row affected (0.09 sec)
+    '>
+    '> mysql> insert into test1(age) values(15);
+    '> ERROR 3819 (HY000): Check constraint 'test1_chk_1' is violated.
+    '> mysql> insert into test1(age) values(15);
+    '> ERROR 3819 (HY000): Check constraint 'test1_chk_1' is violated.
+    '> mysql> insert into test1(age) values(25);
+    '> Query OK, 1 row affected (0.05 sec)
+    '>
+    '> mysql> select * from test1;
+    '> +----+------+
+    '> | id | age  |
+    '> +----+------+
+    '> |  1 |   23 |
+    '> |  2 |   25 |
+    '> +----+------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> create table test2(
+    '>     -> id int not null auto_increment primary key,
+    '>     -> name varchar(50) default 'karim',
+    '>     -> age int
+    '>     -> );
+    '> Query OK, 0 rows affected (0.28 sec)
+    '>
+    '> mysql> describe test2;
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | Field | Type        | Null | Key | Default | Extra          |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | id    | int         | NO   | PRI | NULL    | auto_increment |
+    '> | name  | varchar(50) | YES  |     | karim   |                |
+    '> | age   | int         | YES  |     | NULL    |                |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> 3 rows in set (0.00 sec)
+    '>
+    '> mysql> insert into test2(age) values(10);
+    '> Query OK, 1 row affected (0.09 sec)
+    '>
+    '> mysql> select * from test2;
+    '> +----+-------+------+
+    '> | id | name  | age  |
+    '> +----+-------+------+
+    '> |  1 | karim |   10 |
+    '> +----+-------+------+
+    '> 1 row in set (0.00 sec)
+    '>
+    '> mysql> insert into test2(name, age) values('abdur rahim',10);
+    '> Query OK, 1 row affected (0.15 sec)
+    '>
+    '> mysql> select * from test2;
+    '> +----+-------------+------+
+    '> | id | name        | age  |
+    '> +----+-------------+------+
+    '> |  1 | karim       |   10 |
+    '> |  2 | abdur rahim |   10 |
+    '> +----+-------------+------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> create table test3(
+    '>     -> id not null auto_increment primary key,
+    '>     -> brandName varchar(25) unique
+    '>     -> );
+    '> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null auto_increment primary key,
+    -> brandName varchar(25) unique
+    -> )' at line 2
+    '> mysql> create table test3(
+    '>     -> id int not null auto_increment primary key,
+    '>     -> brand varchar(25)
+    '>     -> );
+    '> Query OK, 0 rows affected (0.21 sec)
+    '>
+    '> mysql> describe test3;
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | Field | Type        | Null | Key | Default | Extra          |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | id    | int         | NO   | PRI | NULL    | auto_increment |
+    '> | brand | varchar(25) | YES  |     | NULL    |                |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> insert into test3(brand) values('a');
+    '> Query OK, 1 row affected (0.04 sec)
+    '>
+    '> mysql> insert into test3(brand) values('a');
+    '> Query OK, 1 row affected (0.07 sec)
+    '>
+    '> mysql> alter table test3
+    '>     -> modify column brand varchar(25) unique;
+    '> ERROR 1062 (23000): Duplicate entry 'a' for key 'test3.brand'
+    '> mysql> select * from test3;
+    '> +----+-------+
+    '> | id | brand |
+    '> +----+-------+
+    '> |  1 | a     |
+    '> |  2 | a     |
+    '> +----+-------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> delete from test3 where id = 2;
+    '> Query OK, 1 row affected (0.09 sec)
+    '>
+    '> mysql> describe test3;
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | Field | Type        | Null | Key | Default | Extra          |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> | id    | int         | NO   | PRI | NULL    | auto_increment |
+    '> | brand | varchar(25) | YES  |     | NULL    |                |
+    '> +-------+-------------+------+-----+---------+----------------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> alter table test3
+    '>     -> modify column brand varchar(50) unique;
+    '> Query OK, 0 rows affected (0.11 sec)
+    '> Records: 0  Duplicates: 0  Warnings: 0
+    '>
+    '> mysql> insert into test3(brand) values('a')
+    '>     -> ;
+    '> ERROR 1062 (23000): Duplicate entry 'a' for key 'test3.brand'
+    '> mysql> insert into test3(brand) values('b')
+    '>     -> ;
+    '> Query OK, 1 row affected (0.13 sec)
+    '>
+    '> mysql> select * from test3;
+    '> +----+-------+
+    '> | id | brand |
+    '> +----+-------+
+    '> |  1 | a     |
+    '> |  4 | b     |
+    '> +----+-------+
+    '> 2 rows in set (0.00 sec)
+    '>
+    '> mysql> create table test4(
+    '>     -> id int not null primary key auto_increment,
+    '>     -> brand varchar(25),
+    '>     -> size enum('small', 'medium', 'large', 'x-large')
+    '>     -> );
+    '> Query OK, 0 rows affected (0.12 sec)
+    '>
+    '> mysql> describe test4;
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> | Field | Type                                     | Null | Key | Default | Extra          |
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> | id    | int                                      | NO   | PRI | NULL    | auto_increment |
+    '> | brand | varchar(25)                              | YES  |     | NULL    |                |
+    '> | size  | enum('small','medium','large','x-large') | YES  |     | NULL    |                |
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> 3 rows in set (0.00 sec)
+    '>
+    '> mysql> insert into test4(brand, size) values('nokia', 'small');
+    '> Query OK, 1 row affected (0.13 sec)
+    '>
+    '> mysql> select * from test4;
+    '> +----+-------+-------+
+    '> | id | brand | size  |
+    '> +----+-------+-------+
+    '> |  1 | nokia | small |
+    '> +----+-------+-------+
+    '> 1 row in set (0.00 sec)
+    '>
+    '> mysql> insert into test4(brand, size) values('nokia', 'sml');
+    '> ERROR 1265 (01000): Data truncated for column 'size' at row 1
+    '> mysql> select * from test4;
+    '> +----+-------+-------+
+    '> | id | brand | size  |
+    '> +----+-------+-------+
+    '> |  1 | nokia | small |
+    '> +----+-------+-------+
+    '> 1 row in set (0.00 sec)
+    '>
+    '> mysql> insert into test4(brand, size) values('samsung', 'medium');
+    '> Query OK, 1 row affected (0.10 sec)
+    '>
+    '> mysql> insert into test4(brand, size) values('oppo', 'large');
+    '> Query OK, 1 row affected (0.04 sec)
+    '>
+    '> mysql> crete index indx_brand on test4(brand);
+    '> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'crete index indx_brand on test4(brand)' at line 1
+    '> mysql> create index indx_brand on test4(brand);
+    '> Query OK, 0 rows affected (0.16 sec)
+    '> Records: 0  Duplicates: 0  Warnings: 0
+    '>
+    '> mysql> describe test4;
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> | Field | Type                                     | Null | Key | Default | Extra          |
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> | id    | int                                      | NO   | PRI | NULL    | auto_increment |
+    '> | brand | varchar(25)                              | YES  | MUL | NULL    |                |
+    '> | size  | enum('small','medium','large','x-large') | YES  |     | NULL    |                |
+    '> +-------+------------------------------------------+------+-----+---------+----------------+
+    '> 3 rows in set (0.01 sec)
+    '>
+    '> mysql> select * from test4;
+    '> +----+---------+--------+
+    '> | id | brand   | size   |
+    '> +----+---------+--------+
+    '> |  1 | nokia   | small  |
+    '> |  2 | samsung | medium |
+    '> |  3 | oppo    | large  |
+    '> +----+---------+--------+
+    '> 3 rows in set (0.00 sec)
+    '>
+    '> mysql> select * from test4 use index(indx_brand);
+    '> +----+---------+--------+
+    '> | id | brand   | size   |
+    '> +----+---------+--------+
+    '> |  1 | nokia   | small  |
+    '> |  2 | samsung | medium |
+    '> |  3 | oppo    | large  |
+    '> +----+---------+--------+
+    '> 3 rows in set (0.02 sec)
+    '>
+    '> mysql> create table Persons(
+    '>     -> Person_id int not null primary key auto_increment,
+    '>     -> Name varchar(25) not null,
+    '>     -> Age int check(age>=18),
+    '>     -> City varchar(25)
+    '>     -> );
+    '> Query OK, 0 rows affected (0.24 sec)
+    '>
+    '> mysql> describe Persons;
+    '> +-----------+-------------+------+-----+---------+----------------+
+    '> | Field     | Type        | Null | Key | Default | Extra          |
+    '> +-----------+-------------+------+-----+---------+----------------+
+    '> | Person_id | int         | NO   | PRI | NULL    | auto_increment |
+    '> | Name      | varchar(25) | NO   |     | NULL    |                |
+    '> | Age       | int         | YES  |     | NULL    |                |
+    '> | City      | varchar(25) | YES  |     | NULL    |                |
+    '> +-----------+-------------+------+-----+---------+----------------+
+    '> 4 rows in set (0.00 sec)
+    '>
+    '> mysql> create table Orders(
+    '>     -> Order_id int not null primary key auto_increment,
+    '>     -> Order_num int not null,
+    '>     -> Person_id int,
+    '>     -> foreign key (Person_id) references Persons(Persons)
+    '>     -> );
+    '> ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'Persons' for constraint 'orders_ibfk_1' in the referenced table 'persons'
+    '> mysql> create table Orders(
+    '>     -> Order_id int not null primary key auto_increment,
+    '>     -> Order_num int not null,
+    '>     -> Person_id int,
+    '>     -> foreign key (Person_id) references Persons(Person_id)
+    '>     -> );
+    '> Query OK, 0 rows affected (0.22 sec)
+    '>
+    '> mysql> decribe orders;
+    '> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'decribe orders' at line 1
+    '> mysql> decribe Orders;
+    '> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'decribe Orders' at line 1
+    '> mysql> describe Orders;
+    '> +-----------+------+------+-----+---------+----------------+
+    '> | Field     | Type | Null | Key | Default | Extra          |
+    '> +-----------+------+------+-----+---------+----------------+
+    '> | Order_id  | int  | NO   | PRI | NULL    | auto_increment |
+    '> | Order_num | int  | NO   |     | NULL    |                |
+    '> | Person_id | int  | YES  | MUL | NULL    |                |
+    '> +-----------+------+------+-----+---------+----------------+
+    '> 3 rows in set (0.00 sec)
+    '>
+    '> mysql> insert into Persons(Name, Age, City) values('abdur rahim',23,'New York');
+    '> Query OK, 1 row affected (0.11 sec)
+    '>
+    '> mysql> insert into Persons(Name, Age, City) values('abdur rahim',23,'Washington ');
+    '> Query OK, 1 row affected (0.04 sec)
+    '>
+    '> mysql> insert into Orders(Order_num, Person_id) values(100, 23);
+    '> ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`mydb`.`orders`, CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`Person_id`) REFERENCES `persons` (`Person_id`))
+    '> mysql> insert into Orders(Order_num, Person_id) values(100, 2);
+    '> Query OK, 1 row affected (0.14 sec)
+    '>
+    '> CREATE VIEW [Products Above Average Price] AS SELECT ProductName, Price FROM Products WHERE Price > (SELECT AVG(Price) FROM Products);
+    '> ^Z^Z^A
+Bye
+
+C:\laragon\www
+λ
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use mydb;
+Database changed
+mysql> CREATE VIEW [Products Above Average Price] AS SELECT ProductName, Price FROM Products WHERE Price > (SELECT AVG(Price) FROM Products);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[Products Above Average Price] AS SELECT ProductName, Price FROM Products WHERE ' at line 1
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| oerder         |
+| orders         |
+| persons        |
+| products       |
+| test1          |
+| test2          |
+| test3          |
+| test4          |
+| user           |
++----------------+
+9 rows in set (0.17 sec)
+
+mysql> select * from orders;
++----------+-----------+-----------+
+| Order_id | Order_num | Person_id |
++----------+-----------+-----------+
+|        2 |       100 |         2 |
+|        3 |       101 |         1 |
+|        4 |       102 |         1 |
+|        5 |       103 |         2 |
++----------+-----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select Order_id, Order_num, case
+    -> when Order_num > 101 then 'the quantity is greater than 101'
+    -> when Order_num == 101 then 'the quantity is 101'
+    -> else 'the quantity is under 101'
+    -> end as
+    -> NoteText
+    -> from orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== 101 then 'the quantity is 101'
+else 'the quantity is under 101'
+end as
+NoteT' at line 3
+mysql> select Order_id, Order_num, case
+    -> when Order_num > 101 then 'the quantity is greater than 101'
+    -> when Order_num = 101 then 'the quantity is 101'
+    -> else 'the number under 101'
+    -> end as NoteText
+    -> from orders;
++----------+-----------+----------------------------------+
+| Order_id | Order_num | NoteText                         |
++----------+-----------+----------------------------------+
+|        2 |       100 | the number under 101             |
+|        3 |       101 | the quantity is 101              |
+|        4 |       102 | the quantity is greater than 101 |
+|        5 |       103 | the quantity is greater than 101 |
++----------+-----------+----------------------------------+
+4 rows in set (0.00 sec)
+
+mysql>
+
