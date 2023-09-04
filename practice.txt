@@ -1052,3 +1052,200 @@ mysql> select Order_id, Order_num, case
 
 mysql>
 
+
+#######################################4/9/2023###############################################################################################3333
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost:3306' (10061)
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| firstproject       |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (3.07 sec)
+
+mysql> use mydb;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| oerder         |
+| orders         |
+| persons        |
+| products       |
+| test1          |
+| test2          |
+| test3          |
+| test4          |
+| user           |
++----------------+
+9 rows in set (0.12 sec)
+
+mysql> select * from products;
++----+----------------+-------+
+| id | ProductName    | Price |
++----+----------------+-------+
+|  1 | Ceiling Fan    |  3200 |
+|  2 | Table Fan      |  4200 |
+|  3 | Padestral Fan  |  5700 |
+|  4 | Electric Motor |  3800 |
+|  5 | Stebilizer     |  6600 |
++----+----------------+-------+
+5 rows in set (0.10 sec)
+
+mysql> select * from products limit 1, 1;
++----+-------------+-------+
+| id | ProductName | Price |
++----+-------------+-------+
+|  2 | Table Fan   |  4200 |
++----+-------------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from products limit 2, 5;
++----+----------------+-------+
+| id | ProductName    | Price |
++----+----------------+-------+
+|  3 | Padestral Fan  |  5700 |
+|  4 | Electric Motor |  3800 |
+|  5 | Stebilizer     |  6600 |
++----+----------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select min(id) as Smallest from products;
++----------+
+| Smallest |
++----------+
+|        1 |
++----------+
+1 row in set (0.10 sec)
+
+mysql> select max(id) as Maxium from products;
++--------+
+| Maxium |
++--------+
+|      5 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select count(id) as Maxium from products;
++--------+
+| Maxium |
++--------+
+|      5 |
++--------+
+1 row in set (0.10 sec)
+
+mysql> select avg(id) as Maxium from products;
++--------+
+| Maxium |
++--------+
+| 3.0000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select sum(id) as Maxium from products;
++--------+
+| Maxium |
++--------+
+|     15 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> --Wildcard card: In card games like poker, a wildcard is a card that can substitute for any other card, increasing the chances of creating a winning hand.
+    -> select *from orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--Wildcard card: In card games like poker, a wildcard is a card that can substit' at line 1
+mysql> --Wildcard card: In card games like poker, a wildcard is a card that can substitute for any other card, increasing the chances of creating a winning hand.:
+    -> select * from orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--Wildcard card: In card games like poker, a wildcard is a card that can substit' at line 1
+mysql> select * from orders; --this is select query
++----------+-----------+-----------+
+| Order_id | Order_num | Person_id |
++----------+-----------+-----------+
+|        2 |       100 |         2 |
+|        3 |       101 |         1 |
+|        4 |       102 |         1 |
+|        5 |       103 |         2 |
++----------+-----------+-----------+
+4 rows in set (0.05 sec)
+
+    -> :
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--this is select query
+:' at line 1
+mysql> Wildcard card: In card games like poker, a wildcard is a card that can substitute for any other card, increasing the chances of creating a winning hand.
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Wildcard card: In card games like poker, a wildcard is a card that can substitut' at line 1
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| oerder         |
+| orders         |
+| persons        |
+| products       |
+| test1          |
+| test2          |
+| test3          |
+| test4          |
+| user           |
++----------------+
+9 rows in set (0.05 sec)
+
+mysql> describe persons;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| Person_id | int         | NO   | PRI | NULL    | auto_increment |
+| Name      | varchar(25) | NO   |     | NULL    |                |
+| Age       | int         | YES  |     | NULL    |                |
+| City      | varchar(25) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.12 sec)
+
+mysql> describe orders;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| Order_id  | int  | NO   | PRI | NULL    | auto_increment |
+| Order_num | int  | NO   |     | NULL    |                |
+| Person_id | int  | YES  | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select persons.Name, orders.Order_num from persons inner join orders on persons.Person_id = orders.Person_id;
++-------------+-----------+
+| Name        | Order_num |
++-------------+-----------+
+| abdur rahim |       100 |
+| abdur rahim |       101 |
+| abdur rahim |       102 |
+| abdur rahim |       103 |
++-------------+-----------+
+4 rows in set (0.20 sec)
+
+mysql>
