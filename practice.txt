@@ -1249,3 +1249,254 @@ mysql> select persons.Name, orders.Order_num from persons inner join orders on p
 4 rows in set (0.20 sec)
 
 mysql>
+
+
+############################################### 9/5/23 #######################################
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show tables;
+ERROR 1046 (3D000): No database selected
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| firstproject       |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.14 sec)
+
+mysql> use mydb;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_mydb |
++----------------+
+| oerder         |
+| orders         |
+| persons        |
+| products       |
+| test1          |
+| test2          |
+| test3          |
+| test4          |
+| user           |
++----------------+
+9 rows in set (0.07 sec)
+
+mysql> select * persons;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'persons' at line 1
+mysql> select * from persons;
++-----------+-------------+------+-------------+
+| Person_id | Name        | Age  | City        |
++-----------+-------------+------+-------------+
+|         1 | abdur rahim |   23 | New York    |
+|         2 | abdur rahim |   23 | Washington  |
++-----------+-------------+------+-------------+
+2 rows in set (0.09 sec)
+
+mysql> select * from orders;
++----------+-----------+-----------+
+| Order_id | Order_num | Person_id |
++----------+-----------+-----------+
+|        2 |       100 |         2 |
+|        3 |       101 |         1 |
+|        4 |       102 |         1 |
+|        5 |       103 |         2 |
++----------+-----------+-----------+
+4 rows in set (0.02 sec)
+
+mysql> select persons.Name, orders.Order_num from persons left join orders on persons.Person_id = orders.Person_id;
++-------------+-----------+
+| Name        | Order_num |
++-------------+-----------+
+| abdur rahim |       102 |
+| abdur rahim |       101 |
+| abdur rahim |       103 |
+| abdur rahim |       100 |
++-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select persons.Name, orders.Order_num from persons inner join orders on persons.Person_id = orders.Person_id;
++-------------+-----------+
+| Name        | Order_num |
++-------------+-----------+
+| abdur rahim |       100 |
+| abdur rahim |       101 |
+| abdur rahim |       102 |
+| abdur rahim |       103 |
++-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from persons left join orders on persons.Person_id = orders.Person_id;
++-----------+-------------+------+-------------+----------+-----------+-----------+
+| Person_id | Name        | Age  | City        | Order_id | Order_num | Person_id |
++-----------+-------------+------+-------------+----------+-----------+-----------+
+|         1 | abdur rahim |   23 | New York    |        4 |       102 |         1 |
+|         1 | abdur rahim |   23 | New York    |        3 |       101 |         1 |
+|         2 | abdur rahim |   23 | Washington  |        5 |       103 |         2 |
+|         2 | abdur rahim |   23 | Washington  |        2 |       100 |         2 |
++-----------+-------------+------+-------------+----------+-----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> create table t1(
+    -> a int not null auto_increment primary key,
+    -> b varchar(25) not null
+    -> );
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> create table t2(
+    -> a int not null,
+    -> c varchar(25)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> select * from t1;
+Empty set (0.00 sec)
+
+mysql> insert into t1(b) values('x');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into t1(b) values('y');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into t2(a,c) values(2, 'y');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into t2(a,c) values(3, 'w');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from t1 natural left join t2;
++---+---+------+
+| a | b | c    |
++---+---+------+
+| 1 | x | NULL |
+| 2 | y | y    |
++---+---+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from t1 natural right join t2;
++---+------+------+
+| a | c    | b    |
++---+------+------+
+| 2 | y    | y    |
+| 3 | w    | NULL |
++---+------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from t1 natural inner join t2;
++---+---+------+
+| a | b | c    |
++---+---+------+
+| 2 | y | y    |
++---+---+------+
+1 row in set (0.00 sec)
+
+mysql> select * from t1 inner join t2 on t1.a = t1.a;
++---+---+---+------+
+| a | b | a | c    |
++---+---+---+------+
+| 2 | y | 2 | y    |
+| 1 | x | 2 | y    |
+| 2 | y | 3 | w    |
+| 1 | x | 3 | w    |
++---+---+---+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from t1;
++---+---+
+| a | b |
++---+---+
+| 1 | x |
+| 2 | y |
++---+---+
+2 rows in set (0.00 sec)
+
+mysql> select * from t2;
++---+------+
+| a | c    |
++---+------+
+| 2 | y    |
+| 3 | w    |
++---+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from t1 join t2 on t1.a = t1.a;
++---+---+---+------+
+| a | b | a | c    |
++---+---+---+------+
+| 2 | y | 2 | y    |
+| 1 | x | 2 | y    |
+| 2 | y | 3 | w    |
+| 1 | x | 3 | w    |
++---+---+---+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from t1 cross join t2 on t1.a = t1.a;
++---+---+---+------+
+| a | b | a | c    |
++---+---+---+------+
+| 2 | y | 2 | y    |
+| 1 | x | 2 | y    |
+| 2 | y | 3 | w    |
+| 1 | x | 3 | w    |
++---+---+---+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from t1 left join t2 on t1.a = t2.a;
++---+---+------+------+
+| a | b | a    | c    |
++---+---+------+------+
+| 1 | x | NULL | NULL |
+| 2 | y |    2 | y    |
++---+---+------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from t1 right join t2 on t1.a = t2.a;
++------+------+---+------+
+| a    | b    | a | c    |
++------+------+---+------+
+|    2 | y    | 2 | y    |
+| NULL | NULL | 3 | w    |
++------+------+---+------+
+2 rows in set (0.00 sec)
+
+mysql> (select a from t1) union (select a from t2);
++---+
+| a |
++---+
+| 1 |
+| 2 |
+| 3 |
++---+
+3 rows in set (0.06 sec)
+
+mysql> (select a from t1) union all (select a from t2);
++---+
+| a |
++---+
+| 1 |
+| 2 |
+| 2 |
+| 3 |
++---+
+4 rows in set (0.00 sec)
+
+mysql>
