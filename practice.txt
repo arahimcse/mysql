@@ -1500,3 +1500,289 @@ mysql> (select a from t1) union all (select a from t2);
 4 rows in set (0.00 sec)
 
 mysql>
+
+
+
+###################################################7/9/2023###################################################
+
+C:\laragon\www
+λ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| classicmodels      |
+| firstproject       |
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
+| world_x            |
++--------------------+
+8 rows in set (0.14 sec)
+
+mysql> use classicmodels;
+Database changed
+mysql> show tables;
++-------------------------+
+| Tables_in_classicmodels |
++-------------------------+
+| customers               |
+| employees               |
+| offices                 |
+| orderdetails            |
+| orders                  |
+| payments                |
+| productlines            |
+| products                |
++-------------------------+
+8 rows in set (0.14 sec)
+
+mysql> describe customers;
++------------------------+---------------+------+-----+---------+-------+
+| Field                  | Type          | Null | Key | Default | Extra |
++------------------------+---------------+------+-----+---------+-------+
+| customerNumber         | int           | NO   | PRI | NULL    |       |
+| customerName           | varchar(50)   | NO   |     | NULL    |       |
+| contactLastName        | varchar(50)   | NO   |     | NULL    |       |
+| contactFirstName       | varchar(50)   | NO   |     | NULL    |       |
+| phone                  | varchar(50)   | NO   |     | NULL    |       |
+| addressLine1           | varchar(50)   | NO   |     | NULL    |       |
+| addressLine2           | varchar(50)   | YES  |     | NULL    |       |
+| city                   | varchar(50)   | NO   |     | NULL    |       |
+| state                  | varchar(50)   | YES  |     | NULL    |       |
+| postalCode             | varchar(15)   | YES  |     | NULL    |       |
+| country                | varchar(50)   | NO   |     | NULL    |       |
+| salesRepEmployeeNumber | int           | YES  | MUL | NULL    |       |
+| creditLimit            | decimal(10,2) | YES  |     | NULL    |       |
++------------------------+---------------+------+-----+---------+-------+
+13 rows in set (0.05 sec)
+
+mysql> select count(customerNumber) as Customer,  Country from customers group by coountry having count(customerNumber) > 2;
+ERROR 1054 (42S22): Unknown column 'coountry' in 'group statement'
+mysql> select count(customerNumber) as Customer,  Country from customers group by country having count(customerNumber) > 2;
++----------+-------------+
+| Customer | Country     |
++----------+-------------+
+|       12 | France      |
+|       36 | USA         |
+|        5 | Australia   |
+|        3 | Norway      |
+|       13 | Germany     |
+|        7 | Spain       |
+|        3 | Singapore   |
+|        3 | Finland     |
+|        5 | UK          |
+|        3 | Canada      |
+|        4 | Italy       |
+|        3 | Switzerland |
+|        4 | New Zealand |
++----------+-------------+
+13 rows in set (0.08 sec)
+
+mysql> select count(customerNumber) as Customer,  Country from customers group by country order by count(customerNumber) having count(customerNumber) > 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'having count(customerNumber) > 2' at line 1
+mysql> select count(customerNumber) as Customer,  Country from customers group by country  having count(customerNumber) > 2;
++----------+-------------+
+| Customer | Country     |
++----------+-------------+
+|       12 | France      |
+|       36 | USA         |
+|        5 | Australia   |
+|        3 | Norway      |
+|       13 | Germany     |
+|        7 | Spain       |
+|        3 | Singapore   |
+|        3 | Finland     |
+|        5 | UK          |
+|        3 | Canada      |
+|        4 | Italy       |
+|        3 | Switzerland |
+|        4 | New Zealand |
++----------+-------------+
+13 rows in set (0.00 sec)
+
+mysql> select count(customerNumber) as Customer,  Country from customers group by country  having count(customerNumber) > 2 order by count(customerNumber);
++----------+-------------+
+| Customer | Country     |
++----------+-------------+
+|        3 | Norway      |
+|        3 | Singapore   |
+|        3 | Finland     |
+|        3 | Canada      |
+|        3 | Switzerland |
+|        4 | Italy       |
+|        4 | New Zealand |
+|        5 | Australia   |
+|        5 | UK          |
+|        7 | Spain       |
+|       12 | France      |
+|       13 | Germany     |
+|       36 | USA         |
++----------+-------------+
+13 rows in set (0.01 sec)
+
+mysql> describe customers;
++------------------------+---------------+------+-----+---------+-------+
+| Field                  | Type          | Null | Key | Default | Extra |
++------------------------+---------------+------+-----+---------+-------+
+| customerNumber         | int           | NO   | PRI | NULL    |       |
+| customerName           | varchar(50)   | NO   |     | NULL    |       |
+| contactLastName        | varchar(50)   | NO   |     | NULL    |       |
+| contactFirstName       | varchar(50)   | NO   |     | NULL    |       |
+| phone                  | varchar(50)   | NO   |     | NULL    |       |
+| addressLine1           | varchar(50)   | NO   |     | NULL    |       |
+| addressLine2           | varchar(50)   | YES  |     | NULL    |       |
+| city                   | varchar(50)   | NO   |     | NULL    |       |
+| state                  | varchar(50)   | YES  |     | NULL    |       |
+| postalCode             | varchar(15)   | YES  |     | NULL    |       |
+| country                | varchar(50)   | NO   |     | NULL    |       |
+| salesRepEmployeeNumber | int           | YES  | MUL | NULL    |       |
+| creditLimit            | decimal(10,2) | YES  |     | NULL    |       |
++------------------------+---------------+------+-----+---------+-------+
+13 rows in set (0.00 sec)
+
+mysql> select customerName, city, country from customers order by ( case when city is null then country else city end);
++------------------------------------+-------------------+--------------+
+| customerName                       | city              | country      |
++------------------------------------+-------------------+--------------+
+| Warburg Exchange                   | Aachen            | Germany      |
+| Diecast Classics Inc.              | Allentown         | USA          |
+| Schuyler Imports                   | Amsterdam         | Netherlands  |
+| Down Under Souveniers, Inc         | Auckland          | New Zealand  |
+| GiftsForHim.com                    | Auckland          | New Zealand  |
+| Kelly's Gift Shop                  | Auckland          | New Zealand  |
+| Enaco Distributors                 | Barcelona         | Spain        |
+| Rovelli Gifts                      | Bergamo           | Italy        |
+| Herkku Gifts                       | Bergen            | Norway       |
+| Der Hund Imports                   | Berlin            | Germany      |
+| Precious Collectables              | Bern              | Switzerland  |
+| Gifts4AllAges.com                  | Boston            | USA          |
+| Diecast Collectables               | Boston            | USA          |
+| Cramer Spezialitäten, Ltd          | Brandenburg       | Germany      |
+| Auto-Moto Classics Inc.            | Brickhaven        | USA          |
+| Online Mini Collectables           | Brickhaven        | USA          |
+| Collectables For Less Inc.         | Brickhaven        | USA          |
+| Gift Depot Inc.                    | Bridgewater       | USA          |
+| Signal Collectibles Ltd.           | Brisbane          | USA          |
+| Petit Auto                         | Bruxelles         | Belgium      |
+| Scandinavian Gift Ideas            | Bräcke            | Sweden       |
+| West Coast Collectables Co.        | Burbank           | USA          |
+| Technics Stores Inc.               | Burlingame        | USA          |
+| Cambridge Collectables Co.         | Cambridge         | USA          |
+| Marta's Replicas Co.               | Cambridge         | USA          |
+| King Kong Collectables, Co.        | Central Hong Kong | Hong Kong    |
+| Royale Belge                       | Charleroi         | Belgium      |
+| Souveniers And Things Co.          | Chatswood         | Australia    |
+| Asian Treasures, Inc.              | Cork              | Ireland      |
+| giftsbymail.co.uk                  | Cowes             | UK           |
+| Natürlich Autos                    | Cunewalde         | Germany      |
+| Clover Collections, Co.            | Dublin            | Ireland      |
+| Suominen Souveniers                | Espoo             | Finland      |
+| Blauer See Auto, Co.               | Frankfurt         | Germany      |
+| Messner Shopping Network           | Frankfurt         | Germany      |
+| BG&E Collectables                  | Fribourg          | Switzerland  |
+| Vida Sport, Ltd                    | Genève            | Switzerland  |
+| Australian Collectables, Ltd       | Glen Waverly      | Australia    |
+| Boards & Toys Co.                  | Glendale          | USA          |
+| Gift Ideas Corp.                   | Glendale          | USA          |
+| Mini Auto Werke                    | Graz              | Austria      |
+| SAR Distributors, Co               | Hatfield          | South Africa |
+| Toys of Finland, Co.               | Helsinki          | Finland      |
+| Raanan Stores, Inc                 | Herzlia           | Israel       |
+| Osaka Souveniers Co.               | Kita-ku           | Japan        |
+| Danish Wholesale Imports           | Kobenhavn         | Denmark      |
+| Toms Spezialitäten, Ltd            | Köln              | Germany      |
+| Signal Gift Stores                 | Las Vegas         | USA          |
+| Feuer Online Stores, Inc           | Leipzig           | Germany      |
+| Daedalus Designs Imports           | Lille             | France       |
+| Porto Imports Co.                  | Lisboa            | Portugal     |
+| Lisboa Souveniers, Inc             | Lisboa            | Portugal     |
+| UK Collectables, Ltd.              | Liverpool         | UK           |
+| Stylish Desk Decors, Co.           | London            | UK           |
+| Double Decker Gift Stores, Ltd     | London            | UK           |
+| Men 'R' US Retailers, Ltd.         | Los Angeles       | USA          |
+| Volvo Model Replicas, Co           | Luleå             | Sweden       |
+| Saveley & Henriot, Co.             | Lyon              | France       |
+| Euro+ Shopping Channel             | Madrid            | Spain        |
+| ANG Resellers                      | Madrid            | Spain        |
+| CAF Imports                        | Madrid            | Spain        |
+| Corrida Auto Replicas, Ltd         | Madrid            | Spain        |
+| Anton Designs, Ltd.                | Madrid            | Spain        |
+| Cruz & Sons Co.                    | Makati City       | Philippines  |
+| AV Stores, Co.                     | Manchester        | UK           |
+| Mit Vergnügen & Co.                | Mannheim          | Germany      |
+| Marseille Mini Autos               | Marseille         | France       |
+| Australian Collectors, Co.         | Melbourne         | Australia    |
+| Frau da Collezione                 | Milan             | Italy        |
+| Tokyo Collectables, Ltd            | Minato-ku         | Japan        |
+| Québec Home Shopping Network       | Montréal          | Canada       |
+| Bavarian Collectables Imports, Co. | Munich            | Germany      |
+| Franken Gifts, Co                  | München           | Germany      |
+| Kommission Auto                    | Münster           | Germany      |
+| Atelier graphique                  | Nantes            | France       |
+| La Rochelle Gifts                  | Nantes            | France       |
+| Online Diecast Creations Co.       | Nashua            | USA          |
+| Mini Creations Ltd.                | New Bedford       | USA          |
+| FunGiftIdeas.com                   | New Bedford       | USA          |
+| American Souvenirs Inc             | New Haven         | USA          |
+| Super Scale Inc.                   | New Haven         | USA          |
+| Tekni Collectables Inc.            | Newark            | USA          |
+| Anna's Decorations, Ltd            | North Sydney      | Australia    |
+| Land of Toys Inc.                  | NYC               | USA          |
+| Muscle Machine Inc                 | NYC               | USA          |
+| Vitachrome Inc.                    | NYC               | USA          |
+| Classic Legends Inc.               | NYC               | USA          |
+| Microscale Inc.                    | NYC               | USA          |
+| Norway Gifts By Mail, Co.          | Oslo              | Norway       |
+| Oulu Toy Supplies, Inc.            | Oulu              | Finland      |
+| La Corne D'abondance, Co.          | Paris             | France       |
+| Lyon Souveniers                    | Paris             | France       |
+| Auto Canal+ Petit                  | Paris             | France       |
+| Toys4GrownUps.com                  | Pasadena          | USA          |
+| Classic Gift Ideas, Inc            | Philadelphia      | USA          |
+| Motor Mint Distributors Inc.       | Philadelphia      | USA          |
+| L'ordine Souveniers                | Reggio Emilia     | Italy        |
+| Reims Collectables                 | Reims             | France       |
+| Kremlin Collectables, Co.          | Saint Petersburg  | Russia       |
+| Salzburg Collectables              | Salzburg          | Austria      |
+| Collectable Mini Designs Co.       | San Diego         | USA          |
+| Mini Wheels Co.                    | San Francisco     | USA          |
+| Corporate Gift Ideas Co.           | San Francisco     | USA          |
+| The Sharp Gifts Warehouse          | San Jose          | USA          |
+| Mini Gifts Distributors Ltd.       | San Rafael        | USA          |
+| Iberia Gift Imports, Corp.         | Sevilla           | Spain        |
+| Dragon Souveniers, Ltd.            | Singapore         | Singapore    |
+| Handji Gifts& Co                   | Singapore         | Singapore    |
+| Asian Shopping Network, Co         | Singapore         | Singapore    |
+| Australian Gift Network, Co        | South Brisbane    | Australia    |
+| Baane Mini Imports                 | Stavern           | Norway       |
+| Mini Caravy                        | Strasbourg        | France       |
+| Stuttgart Collectable Exchange     | Stuttgart         | Germany      |
+| Amica Models & Co.                 | Torino            | Italy        |
+| Alpha Cognac                       | Toulouse          | France       |
+| Royal Canadian Collectables, Ltd.  | Tsawassen         | Canada       |
+| Canadian Gift Exchange Network     | Vancouver         | Canada       |
+| Auto Associés & Cie.               | Versailles        | France       |
+| Havel & Zbyszek Co                 | Warszawa          | Poland       |
+| Extreme Desk Decorations, Ltd      | Wellington        | New Zealand  |
+| Mini Classics                      | White Plains      | USA          |
+| Heintze Collectables               | Århus             | Denmark      |
++------------------------------------+-------------------+--------------+
+122 rows in set (0.00 sec)
+
+mysql>
